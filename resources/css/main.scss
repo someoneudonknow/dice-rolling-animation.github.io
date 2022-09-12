@@ -1,0 +1,221 @@
+@import 'variables';
+@import 'mixin';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: 0;
+    border: 0;
+}
+
+body {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    background: $bgColor;
+}
+
+.board {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.dish {
+    transform:perspective(20em) rotateX(10deg);
+    height: 300px;
+    width: 600px;
+    border-radius: 30px;
+    border: 10px solid brown;
+    background-color: green;
+    flex-direction: column;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.7),
+                0 0 15px 5px rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    transform-style: preserve-3d;
+
+    .dice-wrapper{
+        perspective: 40em;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+  
+        .shadow {
+            width: 100px;
+            height: 100px;
+            position:relative;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 0px 15px 20px rgba(0,0,0,0.2),
+                        0px 0px 100px 15px rgba(0,0,0,0.2) inset;
+            
+        }
+    }
+
+    .result{
+        font-size: 25px;
+        color: #fff;
+        font-family: 'popins',serif;
+    }
+}
+
+.dice {
+    // $shadow-size: 10px;
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    transform-style: preserve-3d;
+    transition: all 1s;
+    transform: rotateX(20deg);
+
+    .face {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        border: 5px solid $primaryDiceColor;
+        background: linear-gradient(
+            145deg, #dddbd8, #fff
+        );
+        transform-style: preserve-3d;
+
+        &::before {
+            position: absolute;
+            content: '';
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: $primaryDiceColor;
+            transform: translateZ(-1px);
+        }
+
+        &::after {
+            position: absolute;
+            content: '';
+            top: 50%;
+            left: 50%;
+            height: 18px;
+            width: 18px;
+            background-color: black;
+            border-radius: 50%;
+        }
+    }
+
+    .front {
+        @include _transform(0, 50px);
+
+        &::after {
+            width: 30px;
+            height: 30px;
+            background: $dotColor;
+            margin: -15px 0 0 -15px;
+        }
+    }
+
+    .back {
+       @include _transform(180deg, 50px);
+
+       &::after {
+        margin: -35px 0 0 -30px;
+        box-shadow: 40px 0,
+                0 25px,
+                40px 25px,
+                0 50px,
+                40px 50px;
+       }
+    }
+
+    .top {
+        @include _transform(90deg, 50px);
+
+        &::after {
+            margin: -30px 0 0 -30px;
+            box-shadow: 40px 40px;
+        }
+    }
+
+    .bottom {
+        @include _transform(-90deg, 50px);
+
+        &::after {
+            margin: -36px 0 0 -36px;
+            box-shadow:26px 26px,
+                        52px 52px,
+                        52px 0,
+                        0 52px;
+        }
+    }
+
+    .right{
+        transform: rotateY(90deg) translateZ(50px);
+        
+        &::after {
+            margin: -30px 0 0 -30px;
+            box-shadow: 40px 0,
+                        0 40px,
+                        40px 40px;
+        }
+    }
+
+    .left {
+        transform: rotateY(-90deg) translateZ(50px);
+        
+        &::after {
+            margin: -35px 0 0 -35px;
+            box-shadow: 25px 25px,
+                        50px 50px;
+        }
+    }
+}
+
+.roll-btn {
+    height: 50px;
+    width: 100px;
+    border: 3px solid green;
+    background-color: transparent;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+
+    &::after { 
+        background-color: green;
+        z-index: -1;
+        position: absolute;
+        inset: -1px;
+        content: '';
+        clip-path: circle(0% at center);
+        transition: all ease .4s;
+    }
+
+    &:hover {
+        &::after {
+            clip-path: circle(100% at center);
+        }
+    }
+} 
+
+.nav-list{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+}
+
+@keyframes rolling {
+    30% {
+        transform: rotateX(455deg) rotateY(455deg);
+    }
+    60% {
+        transform: rotateX(700deg) rotateY(-800deg);
+    }
+}
